@@ -3,7 +3,6 @@ import React from 'react'
 class LoginForm extends React.Component {
   constructor(props) {
     super(props);
-    this.submitLogin = this.submitLogin.bind(this);
     this.state = {
       validUser: 'Foo',
       validPass: 'Bar',
@@ -41,6 +40,7 @@ class LoginForm extends React.Component {
   };
 
   submitLogin(e) {
+    e.preventDefault();
     if(this.state.inputUser !== this.state.validUser) {
       this.showValidationErr("username", "Incorrect Username")
     }
@@ -54,8 +54,13 @@ class LoginForm extends React.Component {
       this.showValidationErr("password", "Password cannot be empty");
     }
     if(this.state.inputUser === this.state.validUser && this.state.inputPass === this.state.validPass) {
-      this.setState({ loginSuccess: true });
+      this.validLogin();
     }
+  }
+
+  validLogin() {
+    this.setState({ loginSuccess: true })
+    this.props.validLogin(this.state.loginSuccess);
   }
 
 
@@ -74,30 +79,31 @@ class LoginForm extends React.Component {
 
     return (
       <div className="inner-container">
-        <div className="input-group">
-          <label htmlFor="username">Username</label>
-          <input
-            type="text"
-            className={"login-input " + (usernameErr ? "invalid" : "")}
-            onChange={this.onUsernameChange.bind(this)} />
-          <small>{ usernameErr ? usernameErr : "" }</small>
-        </div>
+        <form onSubmit={this.submitLogin.bind(this)}>
+          <div className="input-group">
+            <label htmlFor="username">Username</label>
+            <input
+              type="text"
+              className={"login-input " + (usernameErr ? "invalid" : "")}
+              onChange={this.onUsernameChange.bind(this)} />
+            <small>{ usernameErr ? usernameErr : "" }</small>
+          </div>
 
-        <div className="input-group">
-          <label htmlFor="password">Password</label>
-          <input
-            type="password"
-            className={"login-input " + (passwordErr ? "invalid" : "")}
-            onChange={this.onPasswordChange.bind(this)} />
-          <small>{ passwordErr ? passwordErr : "" }</small>
-        </div>
+          <div className="input-group">
+            <label htmlFor="password">Password</label>
+            <input
+              type="password"
+              className={"login-input " + (passwordErr ? "invalid" : "")}
+              onChange={this.onPasswordChange.bind(this)} />
+            <small>{ passwordErr ? passwordErr : "" }</small>
+          </div>
 
-        <button
-          type="submit"
-          className="submit-button"
-          onClick={this.submitLogin.bind(this)}
-          >Submit
-        </button>
+          <button
+            type="submit"
+            className="submit-button"
+            >Submit
+          </button>
+        </form>
       </div>
     )
   }

@@ -12,6 +12,10 @@ class App extends React.Component {
     }
   }
 
+  loginSuccess(response) {
+    this.setState({ isLoggedIn: response });
+  };
+
   render() {
 
     return (
@@ -21,12 +25,13 @@ class App extends React.Component {
             <p>Username: Foo</p>
             <p>Password: Bar</p>
           </div>
-          { !this.state.isLoggedIn && <LoginForm /> }
+          { !this.state.isLoggedIn && <LoginForm validLogin={this.loginSuccess.bind(this)}/> }
         </div>
 
         <div>
-          {this.state.isLoggedIn && <LocationForm />}
+          { this.state.isLoggedIn && <LocationForm />}
         </div>
+
       </div>
     );
   }
