@@ -6,7 +6,11 @@ class LocationForm extends React.Component {
     super(props);
     this.state = {
       latitude: '',
-      longitude: ''
+      longitude: '',
+      city: '',
+      state: '',
+      success: false,
+      errorMsg: ''
     }
   }
 
@@ -20,18 +24,30 @@ class LocationForm extends React.Component {
 
   submitLocation(e) {
     e.preventDefault();
-    console.log("derp");
     this.getWeather(this.state.latitude, this.state.longitude);
   }
 
   getWeather(lat, long) {
-    axios.get('https://api.weather.gov/points/' + lat + ',' + long)
+    axios.get('https://api.weather.gov/points/' + lat + ',' + long).then((response) => {
+      const relativeLocation = response.data.properties.relativeLocation.properties;
+      this.setState({
+        city: relativeLocation.city,
+        state: relativeLocation.state,
+        success: true
+      })
+    }).catch(error => {
+      console.error(error);
+      this.setState({
+        success: false,
+        errorMsg: 'Invalid Point'
+      });
+    })
   }
 
   render() {
     return(
       <div className="inner-container">
-        <form onSubmit={this.submitLocation()}>
+        <form onSubmit={this.submitLocation.bind(this)}>
           <div className="input-group">
             <label htmlFor="latitude">Latitude</label>
             <input
@@ -53,6 +69,20 @@ class LocationForm extends React.Component {
             value="Submit"
           />
         </form>
+
+        <div className="location-display">
+          { this.state.success &&
+          <div className="success-location">
+            <h4>You are located in:</h4>
+            <h3>{this.state.city}, {this.state.state}</h3>
+          </div>
+          }
+          { !this.state.success &&
+            <div className="invalid-location">
+              <h3>{this.state.errorMsg}</h3>
+            </div>
+          }
+        </div>
       </div>
     )
   }
