@@ -20,20 +20,12 @@ class App extends React.Component {
   render() {
 
     return (
-      <div className="App">
-      { !this.state.isLoggedIn &&
-        <div className="container">
-            <div>
-              <p>Username: Foo</p>
-              <p>Password: Bar</p>
-            </div>
-          <LoginForm validLogin={this.loginSuccess.bind(this)}/>
-        </div>
-      }
+      <div className="container">
+        { !this.state.isLoggedIn &&
+            <LoginForm validLogin={this.loginSuccess.bind(this)}/>
+        }
 
-        <div className="container">
-          { this.state.isLoggedIn && <LocationForm />}
-        </div>
+        { this.state.isLoggedIn && <LocationForm /> }
 
       </div>
     );

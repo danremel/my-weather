@@ -78,32 +78,37 @@ class LoginForm extends React.Component {
     }
 
     return (
-      <div className="inner-container">
-        <form onSubmit={this.submitLogin.bind(this)}>
-          <div className="input-group">
-            <label htmlFor="username">Username</label>
-            <input
-              type="text"
-              className={"form-input " + (usernameErr ? "invalid" : "")}
-              onChange={this.onUsernameChange.bind(this)} />
-            <small>{ usernameErr ? usernameErr : "" }</small>
-          </div>
+      <div>
+        <div className="hint">
+          <p><strong>Hint:</strong></p>
+          <p>Username: Foo</p>
+          <p>Password: Bar</p>
+        </div>
+        <div className="inner-container">
+          <form onSubmit={this.submitLogin.bind(this)}>
+            <div className="input-group">
+              <label htmlFor="username">Username</label>
+              <input
+                type="text"
+                className={"form-input " + (usernameErr ? "invalid" : "")}
+                onChange={this.onUsernameChange.bind(this)} />
+              <small>{ usernameErr ? usernameErr : "" }</small>
+            </div>
 
-          <div className="input-group">
-            <label htmlFor="password">Password</label>
-            <input
-              type="password"
-              className={"form-input " + (passwordErr ? "invalid" : "")}
-              onChange={this.onPasswordChange.bind(this)} />
-            <small>{ passwordErr ? passwordErr : "" }</small>
-          </div>
+            <div className="input-group">
+              <label htmlFor="password">Password</label>
+              <input
+                type="password"
+                className={"form-input " + (passwordErr ? "invalid" : "")}
+                onChange={this.onPasswordChange.bind(this)} />
+              <small>{ passwordErr ? passwordErr : "" }</small>
+            </div>
 
-          <input
-            type="submit"
-            className="submit-button"
-            value="Submit"
-          />
-        </form>
+            <button type="submit" className="submit-button">
+              Submit
+            </button>
+          </form>
+        </div>
       </div>
     )
   }

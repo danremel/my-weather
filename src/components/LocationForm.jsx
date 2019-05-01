@@ -9,17 +9,36 @@ class LocationForm extends React.Component {
       longitude: '',
       city: '',
       state: '',
-      success: false,
-      errorMsg: ''
+      success: null,
+      errorMsg: null,
+      errors: []
     }
+  }
+
+  showValidationErr(element, message) {
+    this.setState((prevState) => ( { errors: [...prevState.errors, { element, message }] } ));
+  }
+
+  clearValidationErr(element) {
+    this.setState((prevState) => {
+      let newArr = [];
+      for(let err of prevState.errors) {
+        if(element !== err.element) {
+          newArr.push(err)
+        }
+      }
+      return {errors: newArr};
+    });
   }
 
   onLatChange(e) {
     this.setState({ latitude: e.target.value });
+    this.clearValidationErr("latitude");
   }
 
   onLongChange(e) {
     this.setState({ longitude: e.target.value });
+    this.clearValidationErr("longitude");
   }
 
   submitLocation(e) {
@@ -36,7 +55,6 @@ class LocationForm extends React.Component {
         success: true
       })
     }).catch(error => {
-      console.error(error);
       this.setState({
         success: false,
         errorMsg: 'Invalid Point'
@@ -45,30 +63,49 @@ class LocationForm extends React.Component {
   }
 
   render() {
-    return(
-      <div className="inner-container">
-        <form onSubmit={this.submitLocation.bind(this)}>
-          <div className="input-group">
-            <label htmlFor="latitude">Latitude</label>
-            <input
-              type="text"
-              className="form-input"
-              onChange={this.onLatChange.bind(this)}/>
-          </div>
-          <div className="input-group">
-            <label htmlFor="longitude">Longitude</label>
-            <input
-              type="text"
-              className="form-input"
-              onChange={this.onLongChange.bind(this)}/>
-          </div>
 
-          <input
-            type="submit"
-            className="submit-button"
-            value="Submit"
-          />
-        </form>
+    let latErr = null, longErr = null;
+
+    for(let err of this.state.errors) {
+      if(err.element === "latitude") {
+        latErr = err.message;
+      }
+      if(err.element === "longitude") {
+        longErr = err.message;
+      }
+    }
+
+    return(
+      <div>
+        <div className="hint">
+          <p><strong>Hint:</strong></p>
+          <p>Latitude: 39.7456</p>
+          <p>Longitude: -97.0892</p>
+        </div>
+        <div className="inner-container location-form">
+          <form onSubmit={this.submitLocation.bind(this)}>
+            <div className="input-group">
+              <label htmlFor="latitude">Latitude</label>
+              <input
+                type="text"
+                className={"form-input " + (latErr ? "invalid" : "")}
+                onChange={this.onLatChange.bind(this)}/>
+            </div>
+            <div className="input-group">
+              <label htmlFor="longitude">Longitude</label>
+              <input
+                type="text"
+                className={"form-input " + (longErr ? "invalid" : "")}
+                onChange={this.onLongChange.bind(this)}/>
+            </div>
+
+            <input
+              type="submit"
+              className="submit-button"
+              value="Submit"
+            />
+          </form>
+        </div>
 
         <div className="location-display">
           { this.state.success &&
@@ -77,7 +114,7 @@ class LocationForm extends React.Component {
             <h3>{this.state.city}, {this.state.state}</h3>
           </div>
           }
-          { !this.state.success &&
+          { this.state.success === false &&
             <div className="invalid-location">
               <h3>{this.state.errorMsg}</h3>
             </div>
