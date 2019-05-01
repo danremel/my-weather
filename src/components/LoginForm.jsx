@@ -84,7 +84,7 @@ class LoginForm extends React.Component {
             <label htmlFor="username">Username</label>
             <input
               type="text"
-              className={"login-input " + (usernameErr ? "invalid" : "")}
+              className={"form-input " + (usernameErr ? "invalid" : "")}
               onChange={this.onUsernameChange.bind(this)} />
             <small>{ usernameErr ? usernameErr : "" }</small>
           </div>
@@ -93,16 +93,16 @@ class LoginForm extends React.Component {
             <label htmlFor="password">Password</label>
             <input
               type="password"
-              className={"login-input " + (passwordErr ? "invalid" : "")}
+              className={"form-input " + (passwordErr ? "invalid" : "")}
               onChange={this.onPasswordChange.bind(this)} />
             <small>{ passwordErr ? passwordErr : "" }</small>
           </div>
 
-          <button
+          <input
             type="submit"
             className="submit-button"
-            >Submit
-          </button>
+            value="Submit"
+          />
         </form>
       </div>
     )
