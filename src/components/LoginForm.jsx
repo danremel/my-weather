@@ -1,8 +1,10 @@
 import React from 'react'
+import { Route, Redirect} from 'react-router-dom';
 
 class LoginForm extends React.Component {
   constructor(props) {
     super(props);
+    this.handleChange = this.handleChange.bind(this);
     this.state = {
       validUser: 'Foo',
       validPass: 'Bar',
@@ -29,14 +31,18 @@ class LoginForm extends React.Component {
     });
   }
 
-  onUsernameChange(e) {
-    this.setState({ inputUser: e.target.value });
-    this.clearValidationErr("username");
-  };
-
-  onPasswordChange(e) {
-    this.setState({ inputPass: e.target.value });
-    this.clearValidationErr("password");
+  handleChange(e) {
+    switch(e.target.name) {
+      case "username":
+        this.setState({ inputUser: e.target.value });
+        break;
+      case "password":
+        this.setState({ inputPass: e.target.value });
+        break;
+      default:
+        break;
+    };
+    this.clearValidationErr(e.target.name);
   };
 
   submitLogin(e) {
@@ -61,6 +67,7 @@ class LoginForm extends React.Component {
   validLogin() {
     this.setState({ loginSuccess: true })
     this.props.validLogin(this.state.loginSuccess);
+
   }
 
 
@@ -85,22 +92,24 @@ class LoginForm extends React.Component {
           <p>Password: Bar</p>
         </div>
         <div className="inner-container">
-          <form onSubmit={this.submitLogin.bind(this)}>
+          <form onSubmit={(e) => this.submitLogin(e)}>
             <div className="input-group">
               <label htmlFor="username">Username</label>
               <input
+                name="username"
                 type="text"
                 className={"form-input " + (usernameErr ? "invalid" : "")}
-                onChange={this.onUsernameChange.bind(this)} />
+                onChange={this.handleChange} />
               <small>{ usernameErr ? usernameErr : "" }</small>
             </div>
 
             <div className="input-group">
               <label htmlFor="password">Password</label>
               <input
+                name="password"
                 type="password"
                 className={"form-input " + (passwordErr ? "invalid" : "")}
-                onChange={this.onPasswordChange.bind(this)} />
+                onChange={this.handleChange} />
               <small>{ passwordErr ? passwordErr : "" }</small>
             </div>
 

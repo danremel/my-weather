@@ -1,4 +1,5 @@
 import React from 'react';
+import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 
 import LoginForm from './components/LoginForm';
 import LocationForm from './components/LocationForm';
@@ -21,12 +22,12 @@ class App extends React.Component {
 
     return (
       <div className="container">
-        { !this.state.isLoggedIn &&
-            <LoginForm validLogin={this.loginSuccess.bind(this)}/>
-        }
-
-        { this.state.isLoggedIn && <LocationForm /> }
-
+        <Router>
+          <Switch>
+            <Route path="/login" render={(props) => <LoginForm {...props} validLogin={this.loginSuccess.bind(this)}/>} />
+            <Route path="/location" component={LocationForm}/>
+          </Switch>
+        </Router>
       </div>
     );
   }

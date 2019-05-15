@@ -4,6 +4,7 @@ import axios from 'axios';
 class LocationForm extends React.Component {
   constructor(props) {
     super(props);
+    this.handleChange = this.handleChange.bind(this);
     this.state = {
       latitude: '',
       longitude: '',
@@ -31,14 +32,18 @@ class LocationForm extends React.Component {
     });
   }
 
-  onLatChange(e) {
-    this.setState({ latitude: e.target.value });
-    this.clearValidationErr("latitude");
-  }
-
-  onLongChange(e) {
-    this.setState({ longitude: e.target.value });
-    this.clearValidationErr("longitude");
+  handleChange(e) {
+    switch(e.target.name) {
+      case "latitude":
+        this.setState({ latitude: e.target.value });
+        break;
+      case "longitude":
+        this.setState({ longitude: e.target.value });
+        break;
+      default:
+        break;
+    };
+    this.clearValidationErr(e.target.name);
   }
 
   submitLocation(e) {
@@ -88,15 +93,17 @@ class LocationForm extends React.Component {
               <label htmlFor="latitude">Latitude</label>
               <input
                 type="text"
+                name="latitude"
                 className={"form-input " + (latErr ? "invalid" : "")}
-                onChange={this.onLatChange.bind(this)}/>
+                onChange={this.handleChange}/>
             </div>
             <div className="input-group">
               <label htmlFor="longitude">Longitude</label>
               <input
                 type="text"
+                name="longitude"
                 className={"form-input " + (longErr ? "invalid" : "")}
-                onChange={this.onLongChange.bind(this)}/>
+                onChange={this.handleChange}/>
             </div>
 
             <input
